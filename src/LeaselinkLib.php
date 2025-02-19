@@ -23,7 +23,7 @@ use LeaseLink\Model\NotificationData;
  */
 final class LeaseLinkLib
 {
-    private const VERSION = '1.0.0';
+    private const VERSION = '1.0.1';
 
     /**
      * Create a new LeaseLink library instance
