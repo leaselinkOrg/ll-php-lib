@@ -12,7 +12,7 @@ A PHP library for integrating with the LeaseLink API. This library provides a si
 ## Installation
 
 ```bash
-composer require leaselink/leaselink-php
+composer require leaselinkorg/ll-php-lib
 ```
 
 ## Configuration
