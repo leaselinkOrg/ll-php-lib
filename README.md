@@ -11,8 +11,14 @@ A PHP library for integrating with the LeaseLink API. This library provides a si
 
 ## Installation
 
+For stable version:
 ```bash
 composer require leaselinkorg/ll-php-lib
+```
+
+For development version:
+```bash
+composer require leaselinkorg/ll-php-lib:dev-develop
 ```
 
 ## Configuration

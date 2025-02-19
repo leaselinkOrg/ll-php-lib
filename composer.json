@@ -23,6 +23,6 @@
             "email": "integracje@leaselink.pl"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }
