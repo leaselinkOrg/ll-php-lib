@@ -26,8 +26,8 @@ final class LeaseLinkConfig
      * @param string      $logLevel   Logging level ('debug', 'info', 'warning', 'error')
      */
     public function __construct(
-        private readonly string $apiUrl = 'https://online.leaselink.pl/api',
-        private readonly string $testApiUrl = 'https://onlinetest.leaselink.pl/api',
+        private readonly string $apiUrl = 'https://online.leaselink.pl',
+        private readonly string $testApiUrl = 'https://onlinetest.leaselink.pl',
         private readonly ?string $apiKey = null,
         private readonly bool $isTest = false,
         private readonly bool $debug = false,
@@ -37,9 +37,14 @@ final class LeaseLinkConfig
         $this->logLevel = LogLevel::fromString($logLevel);
     }
 
-    public function getApiUrl(): string
+    public function getBaseUrl(): string
     {
         return $this->isTest ? $this->testApiUrl : $this->apiUrl;
+    }
+
+    public function getApiUrl(): string
+    {
+        return $this->getBaseUrl() .'/api';
     }
 
     public function getApiKey(): ?string

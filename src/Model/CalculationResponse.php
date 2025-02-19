@@ -130,7 +130,7 @@ class CalculationResponse
      */
     public function getCalculationUrl(): string
     {
-        return rtrim($this->config->getApiUrl(), '/') . $this->calculationUrl;
+        return rtrim($this->config->getBaseUrl(), '/') . $this->calculationUrl;
     }
 
     public function getTotalNetValue(): float
