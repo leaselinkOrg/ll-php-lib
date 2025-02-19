@@ -23,6 +23,10 @@
             "email": "integracje@leaselink.pl"
         }
     ],
+    "support": {
+        "issues": "https://github.com/leaselinkorg/ll-php-lib/issues",
+        "source": "https://github.com/leaselinkorg/ll-php-lib"
+    },
     "minimum-stability": "dev",
     "prefer-stable": true
 }
