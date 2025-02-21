@@ -116,9 +116,9 @@ final class LeaseLinkApiClient implements LeaseLinkApiClientInterface
      * Sets a new logger instance
      *
      * @param LoggerInterface $logger PSR-3 compliant logger
-     * @return self
+     * @return LeaseLinkApiClientInterface
      */
-    public function setLogger(LoggerInterface $logger): self
+    public function setLogger(LoggerInterface $logger): LeaseLinkApiClientInterface
     {
         $this->logger = $logger;
         return $this;
