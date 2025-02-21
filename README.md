@@ -21,6 +21,11 @@ For development version:
 composer require leaselinkorg/ll-php-lib:dev-develop
 ```
 
+For PHP 7.1+ version:
+```bash
+composer require leaselinkorg/ll-php-lib:dev-support/php71
+```
+
 ## Configuration
 
 First, create a configuration object with your API credentials:
