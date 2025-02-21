@@ -18,10 +18,10 @@ final class LeaseLinkConfig
     private $logLevel;
     
     /** @var string */
-    private $apiUrl;
+    private $apiUrl = 'https://online.leaselink.pl';
     
     /** @var string */
-    private $testApiUrl;
+    private $testApiUrl = 'https://onlinetest.leaselink.pl';
     
     /** @var string|null */
     private $apiKey;
@@ -45,16 +45,12 @@ final class LeaseLinkConfig
      * @param string      $logLevel   Logging level ('debug', 'info', 'warning', 'error')
      */
     public function __construct(
-        string $apiUrl = 'https://online.leaselink.pl',
-        string $testApiUrl = 'https://onlinetest.leaselink.pl',
         ?string $apiKey = null,
         bool $isTest = false,
         bool $debug = false,
         string $logFile = 'logs/leaselink.log',
         string $logLevel = 'info'
     ) {
-        $this->apiUrl = $apiUrl;
-        $this->testApiUrl = $testApiUrl;
         $this->apiKey = $apiKey;
         $this->isTest = $isTest;
         $this->debug = $debug;
