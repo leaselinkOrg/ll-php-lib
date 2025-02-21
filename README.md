@@ -4,7 +4,8 @@ A PHP library for integrating with the LeaseLink API. This library provides a si
 
 ## Requirements
 
-- PHP 8.1 or higher
+- 1.0.1 - PHP 8.1 or higher
+- 1.0.1-php71 - compatible with PHP 7.1+
 - Composer
 - cURL extension
 - JSON extension

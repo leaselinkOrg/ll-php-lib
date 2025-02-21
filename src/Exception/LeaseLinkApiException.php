@@ -13,18 +13,20 @@ namespace LeaseLink\Exception;
 class LeaseLinkApiException extends \Exception
 {
     /** @var array Array of error messages */
-    private array $errors = [];
+    private $errors = [];
 
     /**
      * @param string|array $message Error message or array of error messages
      * @param int $code Error code
      * @param \Throwable|null $previous Previous exception
      */
-    public function __construct(string|array $message = "", int $code = 0, ?\Throwable $previous = null)
+    public function __construct($message = "", int $code = 0, ?\Throwable $previous = null)
     {
         if (is_array($message)) {
             $this->errors = $message;
             $message = $this->formatArrayMessage($message);
+        } else {
+            $message = (string) $message;
         }
 
         parent::__construct($message, $code, $previous);

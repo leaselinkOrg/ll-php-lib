@@ -16,26 +16,62 @@ use Psr\Log\LoggerInterface;
 class ChosenOfferResponse
 {
     /** @var string URL for redirecting the user after offer selection */
-    private string $redirectUrl;
+    private $redirectUrl;
 
-    /** @var array<string, mixed> The original, unprocessed response data */
-    private array $rawResponse;
+    /** @var array The original, unprocessed response data */
+    private $rawResponse;
+
+    /** @var LoggerInterface|null */
+    private $logger;
 
     /**
      * Creates a new chosen offer response instance.
      *
-     * @param array<string, mixed> $response The raw response data from the API
+     * @param array $response The raw response data from the API
      * @param LoggerInterface|null $logger Optional logger instance
      * 
      * @throws LeaseLinkApiException If the response validation fails
      */
     public function __construct(
         array $response,
-        private readonly ?LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->rawResponse = $response;
+        $this->logger = $logger;
         $this->validate();
         $this->parseResponse();
+    }
+
+    /**
+     * Gets the URL where the user should be redirected.
+     *
+     * @return string The redirect URL
+     */
+    public function getRedirectUrl(): string
+    {
+        return $this->redirectUrl;
+    }
+
+    /**
+     * Gets the original, unprocessed response data.
+     *
+     * @return array The raw response data
+     */
+    public function getRawResponse(): array
+    {
+        return $this->rawResponse;
+    }
+
+    /**
+     * Converts the response to an array format.
+     *
+     * @return array The response data as an array
+     */
+    public function toArray(): array
+    {
+        return [
+            'redirectUrl' => $this->redirectUrl,
+        ];
     }
 
     /**
@@ -78,37 +114,5 @@ class ChosenOfferResponse
                 'redirectUrl' => $this->redirectUrl,
             ]);
         }
-    }
-
-    /**
-     * Gets the URL where the user should be redirected.
-     *
-     * @return string The redirect URL
-     */
-    public function getRedirectUrl(): string
-    {
-        return $this->redirectUrl;
-    }
-
-    /**
-     * Gets the original, unprocessed response data.
-     *
-     * @return array<string, mixed> The raw response data
-     */
-    public function getRawResponse(): array
-    {
-        return $this->rawResponse;
-    }
-
-    /**
-     * Converts the response to an array format.
-     *
-     * @return array<string, string> The response data as an array
-     */
-    public function toArray(): array
-    {
-        return [
-            'redirectUrl' => $this->redirectUrl,
-        ];
     }
 }

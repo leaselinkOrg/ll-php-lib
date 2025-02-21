@@ -4,45 +4,85 @@ declare(strict_types=1);
 
 namespace LeaseLink\Enum;
 
-enum LogLevel: string
+/**
+ * Class representing log levels
+ */
+final class LogLevel
 {
-    case DEBUG = 'debug';
-    case INFO = 'info';
-    case NOTICE = 'notice';
-    case WARNING = 'warning';
-    case ERROR = 'error';
-    case CRITICAL = 'critical';
-    case ALERT = 'alert';
-    case EMERGENCY = 'emergency';
+    const DEBUG = 'debug';
+    const INFO = 'info';
+    const NOTICE = 'notice';
+    const WARNING = 'warning';
+    const ERROR = 'error';
+    const CRITICAL = 'critical';
+    const ALERT = 'alert';
+    const EMERGENCY = 'emergency';
 
-    public static function fromString(string $level): self
+    /** @var string */
+    private $value;
+
+    /**
+     * @param string $value
+     */
+    private function __construct(string $value)
     {
-        return match (strtolower($level)) {
-            'debug' => self::DEBUG,
-            'info' => self::INFO,
-            'notice' => self::NOTICE,
-            'warning' => self::WARNING,
-            'error' => self::ERROR,
-            'critical' => self::CRITICAL,
-            'alert' => self::ALERT,
-            'emergency' => self::EMERGENCY,
-            default => self::INFO
-        };
+        $this->value = $value;
     }
 
-    public function shouldLog(LogLevel $minimumLevel): bool
+    /**
+     * @param string $level
+     * @return self
+     */
+    public static function fromString(string $level): self
+    {
+        $level = strtolower($level);
+        switch ($level) {
+            case self::DEBUG:
+                return new self(self::DEBUG);
+            case self::INFO:
+                return new self(self::INFO);
+            case self::NOTICE:
+                return new self(self::NOTICE);
+            case self::WARNING:
+                return new self(self::WARNING);
+            case self::ERROR:
+                return new self(self::ERROR);
+            case self::CRITICAL:
+                return new self(self::CRITICAL);
+            case self::ALERT:
+                return new self(self::ALERT);
+            case self::EMERGENCY:
+                return new self(self::EMERGENCY);
+            default:
+                return new self(self::INFO);
+        }
+    }
+
+    /**
+     * @param LogLevel $minimumLevel
+     * @return bool
+     */
+    public function shouldLog(self $minimumLevel): bool
     {
         $levels = [
-            self::DEBUG->value => 0,
-            self::INFO->value => 1,
-            self::NOTICE->value => 2,
-            self::WARNING->value => 3,
-            self::ERROR->value => 4,
-            self::CRITICAL->value => 5,
-            self::ALERT->value => 6,
-            self::EMERGENCY->value => 7
+            self::DEBUG => 0,
+            self::INFO => 1,
+            self::NOTICE => 2,
+            self::WARNING => 3,
+            self::ERROR => 4,
+            self::CRITICAL => 5,
+            self::ALERT => 6,
+            self::EMERGENCY => 7
         ];
 
         return $levels[$this->value] >= $levels[$minimumLevel->value];
+    }
+
+    /**
+     * @return string
+     */
+    public function getValue(): string
+    {
+        return $this->value;
     }
 }

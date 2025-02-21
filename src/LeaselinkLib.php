@@ -23,7 +23,13 @@ use LeaseLink\Model\NotificationData;
  */
 final class LeaseLinkLib
 {
-    private const VERSION = '1.0.1';
+    private const VERSION = '1.0.1-php71';
+
+    /** @var LeaseLinkConfig */
+    private $config;
+
+    /** @var LeaseLinkApiClientInterface */
+    private $apiClient;
 
     /**
      * Create a new LeaseLink library instance
@@ -33,9 +39,12 @@ final class LeaseLinkLib
      * @throws LeaseLinkApiException When API key is missing
      */
     public function __construct(
-        private readonly LeaseLinkConfig $config,
-        private readonly LeaseLinkApiClientInterface $apiClient
+        LeaseLinkConfig $config,
+        LeaseLinkApiClientInterface $apiClient
     ) {
+        $this->config = $config;
+        $this->apiClient = $apiClient;
+
         if ($this->config->getApiKey() === null) {
             $this->apiClient->getLogger()->error('API key is missing');
             throw new LeaseLinkApiException('API key is required');
@@ -61,7 +70,9 @@ final class LeaseLinkLib
             $token = $this->apiClient->getToken();
 
             $data = [
-                'Items' => array_map(fn(CalculationItem $item) => $item->toArray(), $items)
+                'Items' => array_map(function(CalculationItem $item) {
+                    return $item->toArray();
+                }, $items)
             ];
 
             if ($options) {
@@ -144,7 +155,7 @@ final class LeaseLinkLib
             $notification = new NotificationData($rawData);
 
             $this->apiClient->getLogger()->info('Notification processed', [
-                'status' => $notification->getStatus()->name,
+                'status' => $notification->getStatus()->getValue(),
                 'transactionId' => $notification->getTransactionId(),
                 'document' => $notification->getCustomerExternalDocument(),
                 'invoiceData' => $notification->getInvoiceData()

@@ -18,23 +18,56 @@ use LeaseLink\Exception\LeaseLinkApiException;
  */
 class NotificationData
 {
-    private NotificationStatus $status;
-    private string $statusName;
-    private string $transactionId;
-    private ?string $companyName;
-    private ?string $taxId;
-    private ?string $city;
-    private ?string $zipCode;
-    private ?string $streetName;
-    private ?string $streetNumber;
-    private ?string $locationNumber;
-    private string $partnerId;
-    private string $customerExternalDocument;
-    private ?string $financialProductType;
-    private ?float $contractGrossValue;
-    private ?int $numberOfInstallments;
-    private \DateTimeImmutable $operationDateTime;
-    private string $guid;
+    /** @var NotificationStatus */
+    private $status;
+    
+    /** @var string */
+    private $statusName;
+    
+    /** @var string */
+    private $transactionId;
+    
+    /** @var string|null */
+    private $companyName;
+    
+    /** @var string|null */
+    private $taxId;
+    
+    /** @var string|null */
+    private $city;
+    
+    /** @var string|null */
+    private $zipCode;
+    
+    /** @var string|null */
+    private $streetName;
+    
+    /** @var string|null */
+    private $streetNumber;
+    
+    /** @var string|null */
+    private $locationNumber;
+    
+    /** @var string */
+    private $partnerId;
+    
+    /** @var string */
+    private $customerExternalDocument;
+    
+    /** @var string|null */
+    private $financialProductType;
+    
+    /** @var float|null */
+    private $contractGrossValue;
+    
+    /** @var int|null */
+    private $numberOfInstallments;
+    
+    /** @var \DateTimeImmutable */
+    private $operationDateTime;
+    
+    /** @var string */
+    private $guid;
 
     /**
      * Create new notification from webhook data
@@ -131,7 +164,7 @@ class NotificationData
     public function toArray(): array
     {
         return [
-            'status' => $this->status->value,
+            'status' => $this->status->getValue(),
             'statusName' => $this->statusName,
             'transactionId' => $this->transactionId,
             'companyName' => $this->companyName,

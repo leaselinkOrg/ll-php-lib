@@ -17,6 +17,39 @@ class CalculationItem
 {
     private const ALLOWED_TAX_VALUES = ['ZW', '0', '5', '8', '23'];
 
+    /** @var string */
+    private $name;
+
+    /** @var int */
+    private $quantity;
+
+    /** @var string */
+    private $categoryLevel1;
+
+    /** @var float */
+    private $unitNetPrice;
+
+    /** @var float */
+    private $unitGrossPrice;
+
+    /** @var string */
+    private $tax;
+
+    /** @var float */
+    private $unitTaxValue;
+
+    /** @var string|null */
+    private $categoryLevel2;
+
+    /** @var string|null */
+    private $categoryLevel3;
+
+    /** @var string|null */
+    private $itemId;
+
+    /** @var LoggerInterface|null */
+    private $logger;
+
     /**
      * Creates a new calculation item.
      *
@@ -35,18 +68,30 @@ class CalculationItem
      * @throws LeaseLinkApiException If validation fails
      */
     public function __construct(
-        private readonly string $name,
-        private readonly int $quantity,
-        private readonly string $categoryLevel1,
-        private readonly float $unitNetPrice,
-        private readonly float $unitGrossPrice,
-        private readonly string $tax,
-        private readonly float $unitTaxValue,
-        private readonly ?string $categoryLevel2 = null,
-        private readonly ?string $categoryLevel3 = null,
-        private readonly ?string $itemId = null,
-        private readonly ?LoggerInterface $logger = null
+        string $name,
+        int $quantity,
+        string $categoryLevel1,
+        float $unitNetPrice,
+        float $unitGrossPrice,
+        string $tax,
+        float $unitTaxValue,
+        ?string $categoryLevel2 = null,
+        ?string $categoryLevel3 = null,
+        ?string $itemId = null,
+        ?LoggerInterface $logger = null
     ) {
+        $this->name = $name;
+        $this->quantity = $quantity;
+        $this->categoryLevel1 = $categoryLevel1;
+        $this->unitNetPrice = $unitNetPrice;
+        $this->unitGrossPrice = $unitGrossPrice;
+        $this->tax = $tax;
+        $this->unitTaxValue = $unitTaxValue;
+        $this->categoryLevel2 = $categoryLevel2;
+        $this->categoryLevel3 = $categoryLevel3;
+        $this->itemId = $itemId;
+        $this->logger = $logger;
+
         $this->validate();
     }
 

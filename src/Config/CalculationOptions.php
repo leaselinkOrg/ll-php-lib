@@ -12,27 +12,52 @@ namespace LeaseLink\Config;
  */
 class CalculationOptions
 {
+    /** @var bool */
+    private $multiOffer;
+    
+    /** @var string|null */
+    private $email;
+    
+    /** @var string|null */
+    private $phone;
+    
+    /** @var string|null */
+    private $taxId;
+    
+    /** @var string|null */
+    private $externalOrderId;
+    
+    /** @var bool */
+    private $isCartReadOnly;
+
     /**
-     * @param bool $multiOffer Whether to enable multi-offer calculations
-     * @param string|null $email Customer's email address
-     * @param string|null $phone Customer's phone number
-     * @param string|null $taxId Customer's tax identification number
+     * @param bool        $multiOffer      Whether to enable multi-offer calculations
+     * @param string|null $email          Customer's email address
+     * @param string|null $phone          Customer's phone number
+     * @param string|null $taxId          Customer's tax identification number
      * @param string|null $externalOrderId External order identifier
-     * @param bool $isCartReadOnly Whether the cart should be read-only
+     * @param bool        $isCartReadOnly  Whether the cart should be read-only
      */
     public function __construct(
-        private readonly bool $multiOffer = false,
-        private readonly ?string $email = null,
-        private readonly ?string $phone = null,
-        private readonly ?string $taxId = null,
-        private readonly ?string $externalOrderId = null,
-        private readonly bool $isCartReadOnly = true,
-    ) {}
+        bool $multiOffer = false,
+        ?string $email = null,
+        ?string $phone = null,
+        ?string $taxId = null,
+        ?string $externalOrderId = null,
+        bool $isCartReadOnly = true
+    ) {
+        $this->multiOffer = $multiOffer;
+        $this->email = $email;
+        $this->phone = $phone;
+        $this->taxId = $taxId;
+        $this->externalOrderId = $externalOrderId;
+        $this->isCartReadOnly = $isCartReadOnly;
+    }
 
     /**
      * Convert configuration options to an array format
      * 
-     * @return array<string, mixed> Array representation of the configuration
+     * @return array<string, mixed>
      */
     public function toArray(): array
     {

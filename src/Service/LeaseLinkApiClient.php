@@ -17,16 +17,21 @@ use Psr\Log\NullLogger;
  */
 final class LeaseLinkApiClient implements LeaseLinkApiClientInterface
 {
-    private readonly LoggerInterface $logger;
+    /** @var LeaseLinkConfig */
+    private $config;
+
+    /** @var LoggerInterface */
+    private $logger;
 
     /**
      * @param LeaseLinkConfig  $config Configuration for the API client
      * @param LoggerInterface|null $logger Optional PSR-3 logger instance
      */
     public function __construct(
-        private readonly LeaseLinkConfig $config,
+        LeaseLinkConfig $config,
         ?LoggerInterface $logger = null
     ) {
+        $this->config = $config;
         $this->logger = $logger ?? new NullLogger();
     }
 
@@ -71,7 +76,6 @@ final class LeaseLinkApiClient implements LeaseLinkApiClientInterface
         $this->logger->debug('HTTP response', ['code' => $httpCode, 'body' => $response, 'headers' => $headers, 'data' => $data, 'url' => $url]);
 
         if ($httpCode < 200 || $httpCode >= 300) {
-
             $body = $response !== false ? json_decode($response, true) : null;
 
             $this->logger->error('API request failed', [
@@ -114,7 +118,7 @@ final class LeaseLinkApiClient implements LeaseLinkApiClientInterface
      * @param LoggerInterface $logger PSR-3 compliant logger
      * @return self
      */
-    public function setLogger($logger): self
+    public function setLogger(LoggerInterface $logger): self
     {
         $this->logger = $logger;
         return $this;

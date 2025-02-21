@@ -18,13 +18,32 @@ use Psr\Log\LoggerInterface;
  */
 class CalculationResponse
 {
-    private string $calculationId;
-    private string $calculationUrl;
-    private float $totalNetValue;
-    private float $totalGrossValue;
-    private float $totalTaxValue;
-    private array $offers = [];
-    private array $rawResponse;
+    /** @var string */
+    private $calculationId;
+    
+    /** @var string */
+    private $calculationUrl;
+    
+    /** @var float */
+    private $totalNetValue;
+    
+    /** @var float */
+    private $totalGrossValue;
+    
+    /** @var float */
+    private $totalTaxValue;
+    
+    /** @var array */
+    private $offers = [];
+    
+    /** @var array */
+    private $rawResponse;
+    
+    /** @var LeaseLinkConfig */
+    private $config;
+    
+    /** @var LoggerInterface|null */
+    private $logger;
 
     /**
      * Create new calculation response
@@ -36,10 +55,12 @@ class CalculationResponse
      */
     public function __construct(
         array $response,
-        private readonly LeaseLinkConfig $config,
-        private readonly ?LoggerInterface $logger = null
+        LeaseLinkConfig $config,
+        ?LoggerInterface $logger = null
     ) {
         $this->rawResponse = $response;
+        $this->config = $config;
+        $this->logger = $logger;
         $this->validate();
         $this->parseResponse();
     }

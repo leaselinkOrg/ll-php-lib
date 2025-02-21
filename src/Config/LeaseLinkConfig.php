@@ -14,7 +14,26 @@ use LeaseLink\Enum\LogLevel;
  */
 final class LeaseLinkConfig
 {
-    private readonly LogLevel $logLevel;
+    /** @var LogLevel */
+    private $logLevel;
+    
+    /** @var string */
+    private $apiUrl;
+    
+    /** @var string */
+    private $testApiUrl;
+    
+    /** @var string|null */
+    private $apiKey;
+    
+    /** @var bool */
+    private $isTest;
+    
+    /** @var bool */
+    private $debug;
+    
+    /** @var string */
+    private $logFile;
 
     /**
      * @param string      $apiUrl     Production API URL
@@ -26,14 +45,20 @@ final class LeaseLinkConfig
      * @param string      $logLevel   Logging level ('debug', 'info', 'warning', 'error')
      */
     public function __construct(
-        private readonly string $apiUrl = 'https://online.leaselink.pl',
-        private readonly string $testApiUrl = 'https://onlinetest.leaselink.pl',
-        private readonly ?string $apiKey = null,
-        private readonly bool $isTest = false,
-        private readonly bool $debug = false,
-        private readonly string $logFile = 'logs/leaselink.log',
+        string $apiUrl = 'https://online.leaselink.pl',
+        string $testApiUrl = 'https://onlinetest.leaselink.pl',
+        ?string $apiKey = null,
+        bool $isTest = false,
+        bool $debug = false,
+        string $logFile = 'logs/leaselink.log',
         string $logLevel = 'info'
     ) {
+        $this->apiUrl = $apiUrl;
+        $this->testApiUrl = $testApiUrl;
+        $this->apiKey = $apiKey;
+        $this->isTest = $isTest;
+        $this->debug = $debug;
+        $this->logFile = $logFile;
         $this->logLevel = LogLevel::fromString($logLevel);
     }
 

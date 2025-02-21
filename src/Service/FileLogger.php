@@ -9,21 +9,42 @@ use LeaseLink\Enum\LogLevel;
 
 class FileLogger extends AbstractLogger
 {
-    private readonly LogLevel $minimumLevel;
+    /** @var LogLevel */
+    private $minimumLevel;
 
+    /** @var string */
+    private $logFile;
+
+    /** @var bool */
+    private $debug;
+
+    /**
+     * @param string $logFile Path to log file
+     * @param bool $debug Enable debug logging
+     * @param string $minimumLevel Minimum log level to record
+     */
     public function __construct(
-        private readonly string $logFile,
-        private readonly bool $debug = false,
+        string $logFile,
+        bool $debug = false,
         string $minimumLevel = 'info'
     ) {
         $dir = dirname($logFile);
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
         }
+        
+        $this->logFile = $logFile;
+        $this->debug = $debug;
         $this->minimumLevel = LogLevel::fromString($minimumLevel);
     }
 
-    public function log($level, string|\Stringable $message, array $context = []): void
+    /**
+     * @param mixed $level
+     * @param string|\Stringable $message
+     * @param array $context
+     * @return void
+     */
+    public function log($level, $message, array $context = []): void
     {
         $logLevel = LogLevel::fromString($level);
         
