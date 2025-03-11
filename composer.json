@@ -1,6 +1,6 @@
 {
     "name": "leaselinkorg/ll-php-lib",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "homepage": "https://github.com/leaselinkorg/ll-php-lib",
     "description": "PHP library for LeaseLink API integration",
     "keywords": ["leaselink", "api", "integration"],
