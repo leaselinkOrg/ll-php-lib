@@ -114,7 +114,8 @@ class CalculationResponse
             'percentResidualFee' => (float)($offer['PercentResidualFee'] ?? 0),
             'interestRate' => (float)($offer['InterestRate'] ?? 0),
             'calculationPackageId' => (string)($offer['CalculationPackageId'] ?? ''),
-            'financialProductType' => $offer['FinancialProductType'] ?? ''
+            'financialProductType' => $offer['FinancialProductType'] ?? '',
+            'deferralPeriodDays' => (int)($offer['DeferralPeriodDays'] ?? 0)
         ];
     }
 
