@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Represents a calculation item in the LeaseLink API.
- * 
+ *
  * This class handles validation and conversion of calculation items
  * used in lease calculations.
  */
@@ -23,28 +23,26 @@ class CalculationItem
      * @param string $name The name of the item
      * @param int $quantity The quantity of the item (must be greater than 0)
      * @param string $categoryLevel1 The primary category of the item
-     * @param float $unitNetPrice The net price per unit (must be greater than 0)
+     * @param float|null $unitNetPrice The net price per unit. Null = calculated by API based on Tax
      * @param float $unitGrossPrice The gross price per unit (must be greater than 0)
-     * @param string $tax The tax rate (must be one of: ZW, 0, 5, 8, 23)
-     * @param float $unitTaxValue The tax value per unit
+     * @param string|null $tax The tax rate (one of: ZW, 0, 5, 8, 23). Null = API defaults to "23"
+     * @param float|null $unitTaxValue The tax value per unit. Null = calculated by API based on Tax
      * @param string|null $categoryLevel2 Optional secondary category
      * @param string|null $categoryLevel3 Optional tertiary category
-     * @param string|null $itemId Optional item identifier
      * @param LoggerInterface|null $logger Optional logger instance
-     * 
+     *
      * @throws LeaseLinkApiException If validation fails
      */
     public function __construct(
         private readonly string $name,
         private readonly int $quantity,
         private readonly string $categoryLevel1,
-        private readonly float $unitNetPrice,
-        private readonly float $unitGrossPrice,
-        private readonly string $tax,
-        private readonly float $unitTaxValue,
+        private readonly ?float $unitNetPrice = null,
+        private readonly float $unitGrossPrice = 0,
+        private readonly ?string $tax = null,
+        private readonly ?float $unitTaxValue = null,
         private readonly ?string $categoryLevel2 = null,
         private readonly ?string $categoryLevel3 = null,
-        private readonly ?string $itemId = null,
         private readonly ?LoggerInterface $logger = null
     ) {
         $this->validate();
@@ -67,13 +65,13 @@ class CalculationItem
             if (empty($this->categoryLevel1)) {
                 throw new LeaseLinkApiException('CategoryLevel1 is required');
             }
-            if ($this->unitNetPrice <= 0) {
+            if ($this->unitNetPrice !== null && $this->unitNetPrice <= 0) {
                 throw new LeaseLinkApiException('UnitNetPrice must be greater than 0');
             }
             if ($this->unitGrossPrice <= 0) {
                 throw new LeaseLinkApiException('UnitGrossPrice must be greater than 0');
             }
-            if (!in_array($this->tax, self::ALLOWED_TAX_VALUES)) {
+            if ($this->tax !== null && !in_array($this->tax, self::ALLOWED_TAX_VALUES)) {
                 throw new LeaseLinkApiException('Invalid tax value. Allowed values: ' . implode(', ', self::ALLOWED_TAX_VALUES));
             }
         } catch (LeaseLinkApiException $e) {
@@ -98,20 +96,25 @@ class CalculationItem
             'Name' => $this->name,
             'Quantity' => $this->quantity,
             'CategoryLevel1' => $this->categoryLevel1,
-            'UnitNetPrice' => $this->unitNetPrice,
             'UnitGrossPrice' => $this->unitGrossPrice,
-            'Tax' => $this->tax,
-            'UnitTaxValue' => $this->unitTaxValue
         ];
+
+        if ($this->unitNetPrice !== null) {
+            $data['UnitNetPrice'] = $this->unitNetPrice;
+        }
+
+        if ($this->tax !== null) {
+            $data['Tax'] = $this->tax;
+        }
+        if ($this->unitTaxValue !== null) {
+            $data['UnitTaxValue'] = $this->unitTaxValue;
+        }
 
         if ($this->categoryLevel2) {
             $data['CategoryLevel2'] = $this->categoryLevel2;
         }
         if ($this->categoryLevel3) {
             $data['CategoryLevel3'] = $this->categoryLevel3;
-        }
-        if ($this->itemId) {
-            $data['ItemId'] = $this->itemId;
         }
 
         return $data;

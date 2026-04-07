@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . '/../vendor/autoload.php';
 
 use LeaseLink\Config\LeaseLinkConfig;
@@ -37,16 +38,19 @@ try {
 
     $options = new CalculationOptions(
         multiOffer: true,
-        email: 'test@example.com'
+        email: 'test@example.com',
+        continueUrl: 'https://example.com/thank-you',
+        returnUrl: 'https://example.com/rejected'
     );
 
     // Get calculation result
     $calculationResult = $leaselink->createCalculation($items, $options);
-    
+
     echo "Calculation created:\n";
     echo "ID: {$calculationResult->getCalculationId()}\n";
+    echo "Direct URL: {$calculationResult->getCalculationAbsoluteUrl()}\n";
     echo "Available offers:\n";
-    
+
     // Display all available offers
     foreach ($calculationResult->getOffers() as $index => $offer) {
         echo sprintf(
@@ -61,8 +65,12 @@ try {
 
     // Choose first offer
     $chosenOffer = $calculationResult->getOffers()[0];
-    
-    // Save chosen offer
+
+    // You can also redirect the user directly to the calculator with the offer pre-selected,
+    // without calling SaveChosenOffer:
+    // $urlWithOffer = $calculationResult->getCalculationAbsoluteUrlWithOffer($chosenOffer['calculationPackageId']);
+
+    // Save chosen offer (calculationPackageId is optional — omitting it returns a general offer link)
     $savedOffer = $leaselink->saveChosenOffer(
         $calculationResult->getCalculationId(),
         $chosenOffer['calculationPackageId']
@@ -70,7 +78,7 @@ try {
 
     echo "\nOffer saved successfully!\n";
     echo "Redirect URL: {$savedOffer->getRedirectUrl()}\n";
-    
+
 } catch (\LeaseLink\Exception\LeaseLinkApiException $e) {
     echo "Error: " . $e->getMessage() . "\n";
     print_r($e->getErrors());

@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . '/../vendor/autoload.php';
 
 use LeaseLink\Config\LeaseLinkConfig;
@@ -39,7 +40,9 @@ $fileLogger = new FileLogger(
 // Combine loggers
 class CombinedLogger extends \Psr\Log\AbstractLogger
 {
-    public function __construct(private readonly array $loggers) {}
+    public function __construct(private readonly array $loggers)
+    {
+    }
 
     public function log($level, string|\Stringable $message, array $context = []): void
     {
@@ -61,6 +64,7 @@ $logger->warning('Warning message');
 $logger->error('Error message');
 
 // Create sample calculation
+// Tax, UnitNetPrice and UnitTaxValue are optional — LeaseLink calculates them when omitted
 $items = [
     new CalculationItem(
         name: 'Test Product',
@@ -75,7 +79,7 @@ $items = [
 
 try {
     $result = $leaselink->createCalculation($items);
-    echo "\nCalculation URL: " . $result->getCalculationUrl() . "\n";
+    echo "\nCalculation URL: " . $result->getCalculationAbsoluteUrl() . "\n";
 } catch (\LeaseLink\Exception\LeaseLinkApiException $e) {
     echo "\nError occurred:\n";
     print_r($e->getErrors());

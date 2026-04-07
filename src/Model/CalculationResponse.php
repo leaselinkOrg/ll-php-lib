@@ -10,7 +10,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Represents a calculation response from the LeaseLink API
- * 
+ *
  * Contains calculation details including:
  * - Calculation ID and URL
  * - Total values (net, gross, tax)
@@ -20,6 +20,7 @@ class CalculationResponse
 {
     private string $calculationId;
     private string $calculationUrl;
+    private string $calculationAbsoluteUrl;
     private float $totalNetValue;
     private float $totalGrossValue;
     private float $totalTaxValue;
@@ -87,6 +88,7 @@ class CalculationResponse
 
         $this->calculationId = $this->rawResponse['CalculationId'];
         $this->calculationUrl = $this->rawResponse['CalculationUrl'];
+        $this->calculationAbsoluteUrl = $this->rawResponse['CalculationAbsoluteUrl'] ?? '';
         $this->totalNetValue = (float)$this->rawResponse['TotalNetValue'];
         $this->totalGrossValue = (float)$this->rawResponse['TotalGrossValue'];
         $this->totalTaxValue = (float)$this->rawResponse['TotalTaxValue'];
@@ -125,8 +127,36 @@ class CalculationResponse
     }
 
     /**
-     * Get the full calculation URL including API base URL
+     * Get the absolute calculation URL returned directly by the API.
+     * Use this in new integrations instead of getCalculationUrl().
      *
+     * @return string Absolute URL to the calculation
+     */
+    public function getCalculationAbsoluteUrl(): string
+    {
+        return $this->calculationAbsoluteUrl;
+    }
+
+    /**
+     * Get the absolute calculation URL with an optional pre-selected offer.
+     * Appends ?calculationPackageId=<id> when provided.
+     *
+     * @param string|null $calculationPackageId ID of the offer to pre-select
+     * @return string Absolute URL, optionally with calculationPackageId query param
+     */
+    public function getCalculationAbsoluteUrlWithOffer(?string $calculationPackageId = null): string
+    {
+        if ($calculationPackageId === null || $calculationPackageId === '') {
+            return $this->calculationAbsoluteUrl;
+        }
+
+        return $this->calculationAbsoluteUrl . '?calculationPackageId=' . urlencode($calculationPackageId);
+    }
+
+    /**
+     * Get the full calculation URL including API base URL.
+     *
+     * @deprecated Use getCalculationAbsoluteUrl() instead
      * @return string Complete URL to calculation
      */
     public function getCalculationUrl(): string
@@ -169,6 +199,7 @@ class CalculationResponse
         return [
             'calculationId' => $this->calculationId,
             'calculationUrl' => $this->getCalculationUrl(),
+            'calculationAbsoluteUrl' => $this->calculationAbsoluteUrl,
             'totalNetValue' => $this->totalNetValue,
             'totalGrossValue' => $this->totalGrossValue,
             'totalTaxValue' => $this->totalTaxValue,

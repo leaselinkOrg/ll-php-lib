@@ -4,23 +4,19 @@ declare(strict_types=1);
 
 namespace LeaseLink\Enum;
 
-enum NotificationStatus: int
+enum NotificationStatus: string
 {
-    case PROCESSING = 0;
-    case CANCELLED = -1;
-    case ACCEPTED = 2;
-    case SEND_ASSET = 3;
-    case SIGN_CONTRACT = 4;
+    case NEW = 'NEW';
+    case PROCESSING = 'PROCESSING';
+    case ACCEPTED = 'ACCEPTED';
+    case CANCELLED = 'CANCELLED';
+    case SIGN_CONTRACT = 'SIGN_CONTRACT';
+    case PAYMENT_FOR_ASSET = 'PAYMENT_FOR_ASSET';
+    case SEND_ASSET = 'SEND_ASSET';
+    case BNPL_STATUS_CHANGED = 'BNPL_STATUS_CHANGED';
 
     public static function fromString(string $status): ?self
     {
-        return match (strtoupper($status)) {
-            'PROCESSING' => self::PROCESSING,
-            'CANCELLED' => self::CANCELLED,
-            'ACCEPTED' => self::ACCEPTED,
-            'SEND_ASSET' => self::SEND_ASSET,
-            'SIGN_CONTRACT' => self::SIGN_CONTRACT,
-            default => null
-        };
+        return self::tryFrom(strtoupper($status));
     }
 }

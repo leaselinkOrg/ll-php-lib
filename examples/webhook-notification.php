@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . '/../vendor/autoload.php';
 
 use LeaseLink\Config\LeaseLinkConfig;
@@ -53,21 +54,26 @@ try {
     //     throw new Exception('Invalid secret key');
     // }
 
-    
+
     $notification = $leaselink->handleNotification($rawData);
-    
+
     // Handle different notification statuses
     switch ($notification->getStatus()) {
+        case NotificationStatus::NEW:
+            echo "Calculation created, application not yet submitted\n";
+            // Visible only via GetStatus, not sent as webhook notification
+            break;
+
         case NotificationStatus::PROCESSING:
             echo "Order is being processed\n";
             // Update order status to processing
             break;
-            
+
         case NotificationStatus::ACCEPTED:
             echo "Order has been accepted\n";
             // Update order status to accepted
             break;
-            
+
         case NotificationStatus::SIGN_CONTRACT:
             echo "Contract ready for signing\n";
             echo "Company: " . $notification->toArray()['companyName'] . "\n";
@@ -75,22 +81,31 @@ try {
             echo "Invoice Data" . print_r($notification->getInvoiceData(), true) . "\n";
             // Update order status and store contract details
             break;
-            
+
+        case NotificationStatus::PAYMENT_FOR_ASSET:
+            echo "Application is at the payment stage\n";
+            // In individually agreed processes, the order can be released at this stage
+            break;
+
         case NotificationStatus::SEND_ASSET:
             echo "Asset can be sent\n";
             // Update order status to ready for shipping
             break;
-            
+
         case NotificationStatus::CANCELLED:
             echo "Order was cancelled\n";
             // Update order status to cancelled
             break;
+
+        case NotificationStatus::BNPL_STATUS_CHANGED:
+            echo "Deferred payment status changed (paid on time or converted to installments)\n";
+            break;
     }
-    
+
     // Log full notification data
     echo "\nFull notification data:\n";
     print_r($notification->toArray());
-    
+
 } catch (LeaseLinkApiException $e) {
     echo "Error processing webhook: " . $e->getMessage() . "\n";
     print_r($e->getErrors());
@@ -106,11 +121,11 @@ try {
     if (!$rawData) {
         throw new Exception('Invalid JSON payload');
     }
-    
+
     $notification = $leaselink->handleNotification($rawData);
-    
+
     // Process notification...
-    
+
     http_response_code(200);
     echo json_encode(['status' => 'success']);
 } catch (Exception $e) {

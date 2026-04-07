@@ -15,7 +15,7 @@ use LeaseLink\Model\NotificationData;
 
 /**
  * Main LeaseLink API library class
- * 
+ *
  * Provides methods for interacting with the LeaseLink API including:
  * - Creating calculations
  * - Saving chosen offers
@@ -23,7 +23,7 @@ use LeaseLink\Model\NotificationData;
  */
 final class LeaseLinkLib
 {
-    private const VERSION = '1.0.2.2';
+    private const VERSION = '1.1.0';
 
     /**
      * Create a new LeaseLink library instance
@@ -61,7 +61,7 @@ final class LeaseLinkLib
             $token = $this->apiClient->getToken();
 
             $data = [
-                'Items' => array_map(fn(CalculationItem $item) => $item->toArray(), $items)
+                'Items' => array_map(fn (CalculationItem $item) => $item->toArray(), $items)
             ];
 
             if ($options) {
