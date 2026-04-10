@@ -11,7 +11,7 @@ use LeaseLink\Model\CalculationItem;
 // Debug console logger
 class ConsoleLogger extends \Psr\Log\AbstractLogger
 {
-    public function log($level, string|\Stringable $message, array $context = []): void
+    public function log($level, \Stringable|string $message, array $context = []): void
     {
         echo "[" . strtoupper($level) . "] " . $message . "\n";
         if (!empty($context)) {
@@ -44,7 +44,7 @@ class CombinedLogger extends \Psr\Log\AbstractLogger
     {
     }
 
-    public function log($level, string|\Stringable $message, array $context = []): void
+    public function log($level, \Stringable|string $message, array $context = []): void
     {
         foreach ($this->loggers as $logger) {
             $logger->log($level, $message, $context);

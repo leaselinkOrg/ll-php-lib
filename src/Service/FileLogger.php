@@ -23,10 +23,10 @@ class FileLogger extends AbstractLogger
         $this->minimumLevel = LogLevel::fromString($minimumLevel);
     }
 
-    public function log($level, string|\Stringable $message, array $context = []): void
+    public function log($level, \Stringable|string $message, array $context = []): void
     {
         $logLevel = LogLevel::fromString($level);
-        
+
         if (!$this->debug && $logLevel === LogLevel::DEBUG) {
             return;
         }
@@ -37,13 +37,13 @@ class FileLogger extends AbstractLogger
 
         $date = date('Y-m-d H:i:s');
         $content = "[$date] [$level] $message";
-        
+
         if (!empty($context)) {
             $content .= "\nContext: " . json_encode($context, JSON_PRETTY_PRINT);
         }
-        
+
         $content .= "\n" . str_repeat('-', 80) . "\n";
-        
+
         file_put_contents($this->logFile, $content, FILE_APPEND);
     }
 }

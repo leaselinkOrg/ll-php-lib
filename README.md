@@ -68,8 +68,7 @@ $items = [
         tax: '23',
         unitTaxValue: 934.96,
         categoryLevel2: 'Computers',
-        categoryLevel3: 'Laptops',
-        itemId: 'DELL-XPS-13'
+        categoryLevel3: 'Laptops'
     )
 ];
 
@@ -197,11 +196,14 @@ try {
 ```
 
 Available notification statuses:
-- `PROCESSING` (0) - Order is being processed
-- `CANCELLED` (-1) - Order was cancelled
-- `ACCEPTED` (2) - Order has been accepted
-- `SEND_ASSET` (3) - Asset can be sent
-- `SIGN_CONTRACT` (4) - Contract ready for signing
+- `NEW` - New order created
+- `PROCESSING` - Order is being processed
+- `CANCELLED` - Order was cancelled
+- `ACCEPTED` - Order has been accepted
+- `SIGN_CONTRACT` - Contract ready for signing
+- `PAYMENT_FOR_ASSET` - Payment for asset is required
+- `SEND_ASSET` - Asset can be sent
+- `BNPL_STATUS_CHANGED` - Buy Now Pay Later status has changed
 
 See `examples/webhook-notification.php` for a complete example.
 
